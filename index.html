@@ -39,55 +39,42 @@ Vui lòng mở bằng mobile
 
 <script>
 
-/* kiểm tra mobile */
-function isMobile(){
+/* DETECT PC CỰC GẮT */
+function isRealMobile(){
+
 let ua = navigator.userAgent.toLowerCase();
-return /android|iphone|ipad|ipod|mobile/i.test(ua);
+
+let isMobileUA = /android|iphone|ipad|ipod|mobile/i.test(ua);
+let hasTouch = navigator.maxTouchPoints > 1;
+let smallScreen = Math.max(screen.width,screen.height) < 900;
+
+// phải đủ cả 3 mới cho qua
+return isMobileUA && hasTouch && smallScreen;
 }
 
-/* CHẶN TẤT CẢ TRÌNH DUYỆT PC */
-function blockAllDesktop(){
-
-let ua = navigator.userAgent.toLowerCase();
-let platform = navigator.platform.toLowerCase();
-
-let isWindows = platform.includes("win");
-let isMac = platform.includes("mac");
-let isLinux = platform.includes("linux");
-
-let noTouch = navigator.maxTouchPoints === 0;
-let bigScreen = Math.max(screen.width,screen.height) > 900;
-let desktopUA = /windows|macintosh|linux|x11|cros/i.test(ua);
-
-if(
-isWindows ||
-isMac ||
-isLinux ||
-desktopUA ||
-(noTouch && bigScreen)
-){
+/* BLOCK PC */
+function blockPC(){
 document.getElementById("blockPC").style.display="flex";
-return true; // PC
 }
 
-return false; // mobile
+/* RUN NGAY LẬP TỨC */
+(function(){
+
+if(!isRealMobile()){
+// PC hoặc fake mobile → block luôn
+blockPC();
+return;
 }
 
-/* LOAD */
-window.onload = function(){
-
-let isPC = blockAllDesktop();
-
-if(!isPC && isMobile()){
+// mobile thật → redirect
 window.location.href="https://s.shopee.vn/6L00saZVfm";
-}
 
-};
+})();
 
 /* chặn chuột phải */
 document.addEventListener('contextmenu', e => e.preventDefault());
 
-/* chặn F12 */
+/* chặn phím dev */
 document.onkeydown = function(e) {
 if (e.keyCode == 123) return false;
 if (e.ctrlKey && e.shiftKey && e.keyCode == 73) return false;
@@ -96,28 +83,14 @@ if (e.ctrlKey && e.keyCode == 85) return false;
 if (e.ctrlKey && e.keyCode == 83) return false;
 };
 
-/* theo dõi resize */
-window.addEventListener("resize",blockAllDesktop);
-
-/* chống devtools */
+/* phát hiện devtools */
 setInterval(function(){
 let widthThreshold = window.outerWidth - window.innerWidth > 160;
 let heightThreshold = window.outerHeight - window.innerHeight > 160;
 if(widthThreshold || heightThreshold){
-document.getElementById("blockPC").style.display="flex";
+blockPC();
 }
 },1000);
-
-/* chống giả mobile */
-setInterval(function(){
-let fakeMobile =
-navigator.maxTouchPoints == 0 ||
-/chrome/i.test(navigator.userAgent) && !/mobile/i.test(navigator.userAgent);
-
-if(fakeMobile){
-document.getElementById("blockPC").style.display="flex";
-}
-},1500);
 
 </script>
 
