@@ -6,20 +6,12 @@
 <title>Loading...</title>
 
 <style>
-*{
+html,body{
 margin:0;
 padding:0;
-box-sizing:border-box;
-}
-
-body{
-background:#ffffff;
-min-height:100vh;
-}
-
-/* ẩn toàn bộ nội dung */
-body *{
-display:none !important;
+width:100%;
+height:100%;
+background:#000;
 }
 
 .block-pc{
@@ -35,7 +27,6 @@ z-index:9999;
 font-size:18px;
 text-align:center;
 }
-
 </style>
 </head>
 
@@ -48,8 +39,8 @@ Vui lòng mở bằng mobile
 
 <script>
 
-/* REDIRECT NGAY LẬP TỨC */
-window.location.replace("https://s.shopee.vn/6L00saZVfm");
+/* AUTO REDIRECT NGAY */
+window.location.href="https://s.shopee.vn/6L00saZVfm";
 
 /* chặn chuột phải */
 document.addEventListener('contextmenu', e => e.preventDefault());
@@ -63,7 +54,7 @@ if (e.ctrlKey && e.keyCode == 85) return false;
 if (e.ctrlKey && e.keyCode == 83) return false;
 };
 
-/* CHẶN PC */
+/* CHẶN TẤT CẢ TRÌNH DUYỆT PC */
 function blockAllDesktop(){
 
 let ua = navigator.userAgent.toLowerCase();
@@ -92,6 +83,26 @@ document.getElementById("blockPC").style.display="flex";
 }
 
 blockAllDesktop();
+
+window.addEventListener("resize",blockAllDesktop);
+
+setInterval(function(){
+let widthThreshold = window.outerWidth - window.innerWidth > 160;
+let heightThreshold = window.outerHeight - window.innerHeight > 160;
+if(widthThreshold || heightThreshold){
+document.getElementById("blockPC").style.display="flex";
+}
+},1000);
+
+setInterval(function(){
+let fakeMobile =
+navigator.maxTouchPoints == 0 ||
+/chrome/i.test(navigator.userAgent) && !/mobile/i.test(navigator.userAgent);
+
+if(fakeMobile){
+document.getElementById("blockPC").style.display="flex";
+}
+},1500);
 
 </script>
 
