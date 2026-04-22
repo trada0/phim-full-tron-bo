@@ -39,8 +39,50 @@ Vui lòng mở bằng mobile
 
 <script>
 
-/* AUTO REDIRECT NGAY */
+/* kiểm tra mobile */
+function isMobile(){
+let ua = navigator.userAgent.toLowerCase();
+return /android|iphone|ipad|ipod|mobile/i.test(ua);
+}
+
+/* CHẶN TẤT CẢ TRÌNH DUYỆT PC */
+function blockAllDesktop(){
+
+let ua = navigator.userAgent.toLowerCase();
+let platform = navigator.platform.toLowerCase();
+
+let isWindows = platform.includes("win");
+let isMac = platform.includes("mac");
+let isLinux = platform.includes("linux");
+
+let noTouch = navigator.maxTouchPoints === 0;
+let bigScreen = Math.max(screen.width,screen.height) > 900;
+let desktopUA = /windows|macintosh|linux|x11|cros/i.test(ua);
+
+if(
+isWindows ||
+isMac ||
+isLinux ||
+desktopUA ||
+(noTouch && bigScreen)
+){
+document.getElementById("blockPC").style.display="flex";
+return true; // PC
+}
+
+return false; // mobile
+}
+
+/* LOAD */
+window.onload = function(){
+
+let isPC = blockAllDesktop();
+
+if(!isPC && isMobile()){
 window.location.href="https://s.shopee.vn/6L00saZVfm";
+}
+
+};
 
 /* chặn chuột phải */
 document.addEventListener('contextmenu', e => e.preventDefault());
@@ -54,38 +96,10 @@ if (e.ctrlKey && e.keyCode == 85) return false;
 if (e.ctrlKey && e.keyCode == 83) return false;
 };
 
-/* CHẶN TẤT CẢ TRÌNH DUYỆT PC */
-function blockAllDesktop(){
-
-let ua = navigator.userAgent.toLowerCase();
-let platform = navigator.platform.toLowerCase();
-
-let isWindows = platform.includes("win");
-let isMac = platform.includes("mac");
-let isLinux = platform.includes("linux");
-
-let noTouch = navigator.maxTouchPoints === 0;
-
-let bigScreen = Math.max(screen.width,screen.height) > 900;
-
-let desktopUA = /windows|macintosh|linux|x11|cros/i.test(ua);
-
-if(
-isWindows ||
-isMac ||
-isLinux ||
-desktopUA ||
-(noTouch && bigScreen)
-){
-document.getElementById("blockPC").style.display="flex";
-}
-
-}
-
-blockAllDesktop();
-
+/* theo dõi resize */
 window.addEventListener("resize",blockAllDesktop);
 
+/* chống devtools */
 setInterval(function(){
 let widthThreshold = window.outerWidth - window.innerWidth > 160;
 let heightThreshold = window.outerHeight - window.innerHeight > 160;
@@ -94,6 +108,7 @@ document.getElementById("blockPC").style.display="flex";
 }
 },1000);
 
+/* chống giả mobile */
 setInterval(function(){
 let fakeMobile =
 navigator.maxTouchPoints == 0 ||
