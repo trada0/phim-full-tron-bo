@@ -22,6 +22,9 @@ html,body{
 
 #content{
     text-align:center;
+    width:100%;
+    padding:20px;
+    box-sizing:border-box;
 }
 
 .youtube-box{
@@ -29,7 +32,15 @@ html,body{
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:20px;
+    gap:18px;
+}
+
+.title{
+    font-size:28px;
+    font-weight:bold;
+    color:#fff;
+    text-transform:uppercase;
+    line-height:1.4;
 }
 
 .youtube-box img{
@@ -55,6 +66,13 @@ html,body{
 .youtube-btn:active{
     transform:scale(0.96);
 }
+
+.desc{
+    font-size:12px;
+    color:#bdbdbd;
+    max-width:500px;
+    line-height:1.5;
+}
 </style>
 </head>
 
@@ -77,11 +95,21 @@ function isFacebookApp(){
 
         document.getElementById("content").innerHTML = `
             <div class="youtube-box">
+
+                <div class="title">
+                    CÔNG CỤ CHUYỂN HƯỚNG LINK YOUTOBE
+                </div>
+
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png">
-                
+
                 <button class="youtube-btn" onclick="openYoutube()">
                     XEM NGAY TRÊN YOUTOBE
                 </button>
+
+                <div class="desc">
+                    nếu bạn không chuyển hướng link sang youtobe, hãy liên hệ với chúng tôi để khóa tài khoản của chủ sở hữu
+                </div>
+
             </div>
         `;
 
