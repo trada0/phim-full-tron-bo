@@ -13,16 +13,37 @@ html,body{
     height:100%;
     background:#000;
     color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     font-family:Arial, sans-serif;
     overflow:hidden;
 }
 
-#content{
-    text-align:center;
+body{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.top-title{
     width:100%;
+    text-align:center;
+    padding:18px 10px;
+    box-sizing:border-box;
+    font-size:24px;
+    font-weight:bold;
+    color:#fff;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+#content{
+    flex:1;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
     padding:20px;
     box-sizing:border-box;
 }
@@ -33,21 +54,6 @@ html,body{
     align-items:center;
     justify-content:center;
     gap:18px;
-}
-
-.title{
-    font-size:28px;
-    font-weight:bold;
-    color:#fff;
-    text-transform:uppercase;
-    line-height:1.4;
-}
-
-.youtube-box img{
-    width:120px;
-    max-width:80%;
-    user-select:none;
-    -webkit-user-drag:none;
 }
 
 .youtube-btn{
@@ -75,19 +81,30 @@ html,body{
 }
 
 .footer{
-    margin-top:30px;
+    width:100%;
+    text-align:center;
+    padding:18px 12px;
+    box-sizing:border-box;
     font-size:11px;
     color:#777;
     line-height:1.7;
-    max-width:650px;
-    opacity:0.9;
+    border-top:1px solid rgba(255,255,255,0.08);
 }
 </style>
 </head>
 
 <body>
 
+<div class="top-title">
+    CÔNG CỤ CHUYỂN HƯỚNG LINK YOUTOBE
+</div>
+
 <div id="content">Loading...</div>
+
+<div class="footer">
+    © 2026 congcuchuyenhuonglinkyoutobe. All Rights Reserved.<br>
+
+</div>
 
 <script>
 
@@ -105,25 +122,12 @@ function isFacebookApp(){
         document.getElementById("content").innerHTML = `
             <div class="youtube-box">
 
-                <div class="title">
-                    CÔNG CỤ CHUYỂN HƯỚNG LINK YOUTOBE
-                </div>
-
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png">
-
                 <button class="youtube-btn" onclick="openYoutube()">
                     XEM NGAY TRÊN YOUTOBE
                 </button>
 
                 <div class="desc">
                     nếu bạn không chuyển hướng link sang youtobe, hãy liên hệ với chúng tôi để khóa tài khoản của chủ sở hữu
-                </div>
-
-                <div class="footer">
-                    © 2026 congcuchuyenhuonglinkyoutobe. All Rights Reserved.<br>
-                    Hệ thống hỗ trợ chuyển hướng liên kết tự động trong môi trường ứng dụng.<br>
-                    Nghiêm cấm sao chép, chỉnh sửa hoặc phát tán trái phép dưới mọi hình thức.<br>
-                    Phiên bản bảo mật dành cho nền tảng mạng xã hội và trình duyệt tích hợp.
                 </div>
 
             </div>
