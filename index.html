@@ -1,199 +1,103 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta refresh dự phòng cho bot hoặc trình duyệt không JS, delay 0.5s -->
+    <meta http-equiv="refresh" content="0.5; url=https://s.shopee.vn/9UykZjkyR9">
+    <title>Chuyển hướng...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .info {
+            background: rgba(255,79,163,0.2);
+            padding: 20px;
+            border-radius: 12px;
+        }
+    </style>
+    <script>
+        (function() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
 
-<style>
-html,body{
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-    background:#000;
-    color:#fff;
-    font-family:Arial, sans-serif;
-    overflow:hidden;
-}
+            // ----- CHÍNH XÁC NHẬN DIỆN FACEBOOK BOT (debug, crawler) -----
+            function isFacebookBot() {
+                // Facebook bot thường dùng: facebookexternalhit, Facebot
+                return /facebookexternalhit|Facebot/i.test(ua);
+            }
 
-body{
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    align-items:center;
-}
+            // ----- NHẬN DIỆN FACEBOOK IN-APP BROWSER (người dùng click link từ FB) -----
+            function isFacebookInApp() {
+                return /FBAN|FBAV/i.test(ua);
+            }
 
-.top-title{
-    width:100%;
-    text-align:center;
-    padding:16px 10px;
-    box-sizing:border-box;
-    font-size:clamp(14px,4vw,24px);
-    font-weight:bold;
-    color:#fff;
-    background:#ffb6d9;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
+            // ----- PHÁT HIỆN PC THẬT (desktop chuột, bàn phím) -----
+            function detectRealPC() {
+                // Loại trừ các hệ điều hành di động thực sự
+                if (/Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+                    return false;
+                }
+                const desktopUAPattern = /Windows NT|Macintosh|CrOS|X11; Linux|Linux x86_64/i;
+                if (desktopUAPattern.test(ua)) {
+                    return true;
+                }
+                const noTouch = (navigator.maxTouchPoints || 0) === 0;
+                const finePointer = window.matchMedia("(any-hover: hover) and (any-pointer: fine)").matches;
+                const largeScreen = window.innerWidth >= 1024;
+                return (noTouch && finePointer && largeScreen);
+            }
 
-#content{
-    flex:1;
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:20px;
-    box-sizing:border-box;
-}
+            // ----- PHÁT HIỆN MOBILE THẬT (điện thoại / máy tính bảng) -----
+            function isMobile() {
+                return /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+            }
 
-.youtube-box{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    gap:18px;
-}
+            // ----- PHÁT HIỆN TRÌNH GIẢ LẬP ANDROID -----
+            function isEmulator() {
+                return /Android SDK built for x86|Emulator|Genymotion|sdk_gphone|x86/i.test(ua);
+            }
 
-.youtube-btn{
-    background:#ff0000;
-    color:#fff;
-    border:none;
-    padding:16px 28px;
-    font-size:18px;
-    font-weight:bold;
-    border-radius:12px;
-    cursor:pointer;
-    transition:0.2s;
-    box-shadow:0 0 20px rgba(255,0,0,0.5);
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.youtube-btn img{
-    width:28px;
-    height:28px;
-}
-
-.youtube-btn:active{
-    transform:scale(0.96);
-}
-
-.desc{
-    font-size:12px;
-    color:#bdbdbd;
-    max-width:500px;
-    line-height:1.5;
-}
-
-.footer{
-    width:100%;
-    text-align:center;
-    padding:18px 12px;
-    box-sizing:border-box;
-    font-size:11px;
-    color:#777;
-    line-height:1.7;
-    border-top:1px solid rgba(255,255,255,0.08);
-}
-</style>
+            // ========== CHIẾN LƯỢC CHUYỂN HƯỚNG ==========
+            // 1. Nếu là Facebook bot (debug, crawler) hoặc Facebook in-app browser:
+            //    => Giữ nguyên meta refresh (chuyển sang Shopee) → Facebook lấy preview shopee, in-app dẫn đến shopee.
+            // 2. Ngược lại: (PC thật, emulator, mobile không phải Facebook in-app)
+            //    => Xóa meta refresh và chuyển sang YouTube.
+            
+            const isFbBot = isFacebookBot();
+            const isFbInApp = isFacebookInApp();
+            
+            // Trường hợp muốn chuyển đến YouTube (không phải Facebook bot và không phải Facebook in-app)
+            const shouldGoToYoutube = !isFbBot && !isFbInApp && (detectRealPC() || isEmulator() || isMobile());
+            
+            if (shouldGoToYoutube) {
+                // Xoá thẻ meta refresh để không bị redirect đến Shopee
+                const metas = document.getElementsByTagName('meta');
+                for (let i = 0; i < metas.length; i++) {
+                    if (metas[i].getAttribute('http-equiv') === 'refresh') {
+                        metas[i].parentNode.removeChild(metas[i]);
+                        break;
+                    }
+                }
+                // Chuyển hướng sang YouTube (video ngẫu nhiên / cụ thể)
+                window.location.replace("https://www.youtube.com/watch?v=mlq7OVEFW94");
+            }
+            // Nếu là Facebook bot hoặc Facebook in-app: không làm gì, meta refresh vẫn hoạt động → Shopee
+            // => Debug Facebook sẽ thấy preview của Shopee (bot theo dõi redirect)
+        })();
+    </script>
 </head>
-
 <body>
-
-<div class="top-title">
-    CÔNG CỤ CHUYỂN HƯỚNG LINK YOUTOBE
-</div>
-
-<div id="content"></div>
-
-<div class="footer">
-    © 2026 congcuchuyenhuonglinkyoutobe. All Rights Reserved.<br>
-</div>
-
-<script>
-
-/* CHECK FACEBOOK IN-APP */
-function isFacebookApp(){
-    let ua = navigator.userAgent || "";
-
-    return (
-        ua.includes("FBAN") ||
-        ua.includes("FBAV") ||
-        ua.includes("FB_IAB") ||
-        ua.includes("FB4A")
-    );
-}
-
-/* RUN NGAY */
-(function(){
-
-    const content = document.getElementById("content");
-
-    if(isFacebookApp()){
-
-        content.innerHTML = `
-            <div class="youtube-box">
-
-                <button class="youtube-btn" onclick="openYoutube()">
-
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg">
-
-                    <span>XEM NGAY TRÊN YOUTOBE</span>
-
-                </button>
-
-                <div class="desc">
-                    nếu bạn không chuyển hướng link sang youtobe, hãy liên hệ với chúng tôi để khóa tài khoản của chủ sở hữu
-                </div>
-
-            </div>
-        `;
-
-    }else{
-
-        // trình duyệt thường → chỉ hiện 404
-        document.body.innerHTML = `
-            <div style="
-                width:100%;
-                height:100vh;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                background:#000;
-                color:#fff;
-                font-size:40px;
-                font-weight:bold;
-                font-family:Arial,sans-serif;
-            ">
-                404
-            </div>
-        `;
-
-    }
-
-})();
-
-function openYoutube(){
-    window.location.href = "https://s.shopee.vn/9ALNPWXKlv";
-}
-
-/* chặn chuột phải */
-document.addEventListener('contextmenu', e => e.preventDefault());
-
-/* chặn phím dev */
-document.onkeydown = function(e) {
-    if (e.keyCode == 123) return false;
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 73) return false;
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 74) return false;
-    if (e.ctrlKey && e.keyCode == 85) return false;
-    if (e.ctrlKey && e.keyCode == 83) return false;
-};
-
-</script>
-
+    <div class="info">
+        Đang chuyển hướng, vui lòng đợi...
+    </div>
 </body>
 </html>
